@@ -52,3 +52,22 @@ pub fn read_input() -> Vec<i64> {
         })
         .collect()
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn test_data() -> Vec<i64> {
+        vec![1721, 979, 366, 299, 675, 1456]
+    }
+
+    #[test]
+    fn test_first_solution() {
+        assert_eq!(first_solution(&test_data()).unwrap(), 514579);
+    }
+
+    #[test]
+    fn test_second_solution() {
+        assert_eq!(second_solution(&test_data()).unwrap(), 241861950);
+    }
+}

@@ -80,3 +80,26 @@ pub fn count_valid_passwords(passwords: &Vec<Password>, policy: &PasswordPolicy)
         .filter(|password| password.is_valid(policy))
         .count()
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn test_data() -> Vec<Password> {
+        vec![
+            Password::new("1-3 a: abcde").unwrap(),
+            Password::new("1-3 b: cdefg").unwrap(),
+            Password::new("2-9 c: ccccccccc").unwrap(),
+        ]
+    }
+
+    #[test]
+    fn test_first_solution() {
+        assert_eq!(count_valid_passwords(&test_data(), &PasswordPolicy::RANGE), 2);
+    }
+
+    #[test]
+    fn test_second_solution() {
+        assert_eq!(count_valid_passwords(&test_data(), &PasswordPolicy::POSITION), 1);
+    }
+}

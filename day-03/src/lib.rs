@@ -24,7 +24,7 @@ impl CellState {
     }
 }
 
-pub fn find_trees(map: &Vec<Vec<CellState>>, right: usize, down: usize) -> u32 {
+pub fn find_trees(map: &[Vec<CellState>], right: usize, down: usize) -> u32 {
     let mut trees = 0;
     let mut x = 0;
     let mut y = 0;
@@ -85,11 +85,11 @@ mod tests {
     fn test_second_solution() {
         let map = &&test_map();
         let result: u32 = vec![
-            find_trees(&map, 1, 1),
-            find_trees(&map, 3, 1),
-            find_trees(&map, 5, 1),
-            find_trees(&map, 7, 1),
-            find_trees(&map, 1, 2),
+            find_trees(map, 1, 1),
+            find_trees(map, 3, 1),
+            find_trees(map, 5, 1),
+            find_trees(map, 7, 1),
+            find_trees(map, 1, 2),
         ].iter().product();
         assert_eq!(result, 336);
     }

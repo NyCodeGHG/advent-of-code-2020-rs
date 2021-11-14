@@ -20,11 +20,11 @@ pub enum PasswordPolicy {
 impl Password {
     pub fn is_valid(&self, policy: &PasswordPolicy) -> bool {
         match policy {
-            &PasswordPolicy::RANGE => {
+            PasswordPolicy::RANGE => {
                 let occurrence = self.password.matches(&self.character).count();
                 occurrence >= self.policy.start && occurrence <= self.policy.end
             }
-            &PasswordPolicy::POSITION => {
+            PasswordPolicy::POSITION => {
                 let char = &self.character;
                 let first_position = self.policy.start - 1;
                 let second_position = self.policy.end - 1;
@@ -40,7 +40,7 @@ impl Password {
             // https://regex101.com/r/AHV4kK/1
             static ref RE: Regex = Regex::new("(\\d+)-(\\d+) ([a-z]): ([a-z]+)").unwrap();
         }
-        let captures: Captures = match RE.captures(&input) {
+        let captures: Captures = match RE.captures(input) {
             Some(result) => result,
             None => return Err("Unable to parse input string"),
         };
@@ -74,7 +74,7 @@ pub fn read_input() -> Vec<Password> {
         .collect()
 }
 
-pub fn count_valid_passwords(passwords: &Vec<Password>, policy: &PasswordPolicy) -> usize {
+pub fn count_valid_passwords(passwords: &[Password], policy: &PasswordPolicy) -> usize {
     passwords
         .iter()
         .filter(|password| password.is_valid(policy))

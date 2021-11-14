@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::fs;
 
-pub fn first_solution(input: &Vec<i64>) -> Option<i64> {
+pub fn first_solution(input: &[i64]) -> Option<i64> {
     let mut pairs: HashMap<i64, i64> = HashMap::new();
     for a in input {
         for b in input {
@@ -11,13 +11,10 @@ pub fn first_solution(input: &Vec<i64>) -> Option<i64> {
             pairs.insert(a + b, a * b);
         }
     }
-    match pairs.get(&2020) {
-        Some(n) => Some(*n),
-        None => None,
-    }
+    pairs.get(&2020).copied()
 }
 
-pub fn second_solution(input: &Vec<i64>) -> Option<i64> {
+pub fn second_solution(input: &[i64]) -> Option<i64> {
     let mut pairs: HashMap<i64, i64> = HashMap::new();
     for a in input {
         for b in input {
@@ -29,10 +26,7 @@ pub fn second_solution(input: &Vec<i64>) -> Option<i64> {
             }
         }
     }
-    match pairs.get(&2020) {
-        Some(n) => Some(*n),
-        None => None,
-    }
+    pairs.get(&2020).copied()
 }
 
 pub fn solution_to_string(solution: Option<i64>) -> String {
@@ -48,7 +42,7 @@ pub fn read_input() -> Vec<i64> {
         .lines()
         .map(|line| {
             line.parse()
-                .expect(&format!("Unable to parse {} into a number", &line))
+                .unwrap_or_else(|_| panic!("Unable to parse {} into a number", &line))
         })
         .collect()
 }

@@ -3,9 +3,14 @@ extern crate lazy_static;
 
 use std::collections::HashMap;
 use std::fs;
-use std::str::FromStr;
 
 use regex::Regex;
+
+mod height;
+
+pub use height::Height;
+
+use crate::height::HeightUnit;
 
 pub struct Passport {
     birth_year: Option<String>,
@@ -15,45 +20,6 @@ pub struct Passport {
     hair_color: Option<String>,
     eye_color: Option<String>,
     id: Option<String>,
-}
-
-pub struct Height {
-    value: u32,
-    unit: HeightUnit,
-}
-
-impl FromStr for Height {
-    type Err = String;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        lazy_static! {
-            static ref RE: Regex = Regex::new("^(\\d+)(cm|in)$").unwrap();
-        }
-        let captures = match RE.captures(&s) {
-            Some(captures) => captures,
-            None => return Err(format!("Invalid height: {}", s)),
-        };
-
-        let size = match captures.get(1) {
-            Some(size) => size.as_str().parse::<u32>().unwrap(),
-            None => return Err(format!("Invalid height: {}", s)),
-        };
-
-        let unit = match captures.get(2) {
-            Some(unit) => match unit.as_str() {
-                "cm" => HeightUnit::Centimeters,
-                "in" => HeightUnit::Inches,
-                _ => return Err(format!("Invalid unit in height: {}", s)),
-            },
-            None => return Err(format!("Invalid height: {}", s)),
-        };
-        Ok(Height { value: size, unit })
-    }
-}
-
-#[derive(PartialEq)]
-pub enum HeightUnit {
-    Inches,
-    Centimeters,
 }
 
 impl Passport {
@@ -75,35 +41,35 @@ impl Passport {
             static ref ID_REGEX: Regex = Regex::new("^\\d{9}$").unwrap();
         }
         self.are_required_fields_present()
-            && HAIR_COLOR_REGEX.is_match(&self.hair_color.as_ref().unwrap())
-            && EYE_COLOR_REGEX.is_match(&self.eye_color.as_ref().unwrap())
-            && ID_REGEX.is_match(&self.id.as_ref().unwrap())
+            && HAIR_COLOR_REGEX.is_match(self.hair_color.as_ref().unwrap())
+            && EYE_COLOR_REGEX.is_match(self.eye_color.as_ref().unwrap())
+            && ID_REGEX.is_match(self.id.as_ref().unwrap())
             && self
                 .birth_year
                 .as_ref()
                 .unwrap()
                 .parse::<u32>()
-                .map_or(false, |value| value >= 1920 && value <= 2002)
+                .map_or(false, |value| (1920..=2002).contains(&value))
             && self
                 .issue_year
                 .as_ref()
                 .unwrap()
                 .parse::<u32>()
-                .map_or(false, |value| value >= 2010 && value <= 2020)
+                .map_or(false, |value| (2010..=2020).contains(&value))
             && self
                 .expiration_year
                 .as_ref()
                 .unwrap()
                 .parse::<u32>()
-                .map_or(false, |value| value >= 2020 && value <= 2030)
+                .map_or(false, |value| (2020..=2030).contains(&value))
             && self
                 .height
                 .as_ref()
                 .unwrap()
                 .parse::<Height>()
                 .map_or(false, |value| match value.unit {
-                    HeightUnit::Inches => value.value >= 59 && value.value <= 76,
-                    HeightUnit::Centimeters => value.value >= 150 && value.value <= 193,
+                    HeightUnit::Inches => (59..=76).contains(&value.value),
+                    HeightUnit::Centimeters => (150..=193).contains(&value.value),
                 })
     }
 
@@ -123,7 +89,7 @@ impl Passport {
         let height: Option<String> = parse_value("hgt", &map);
         let id: Option<String> = parse_value("pid", &map);
         let issue_year: Option<String> = parse_value("iyr", &map);
-        let passport = Passport {
+        Passport {
             birth_year,
             expiration_year,
             eye_color,
@@ -131,8 +97,7 @@ impl Passport {
             height,
             id,
             issue_year,
-        };
-        passport
+        }
     }
 }
 

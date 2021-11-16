@@ -46,7 +46,7 @@ pub fn find_trees(map: &[Vec<CellState>], right: usize, down: usize) -> u32 {
 }
 
 pub fn read_input() -> Vec<Vec<CellState>> {
-    parse_map(&fs::read_to_string("inputs/day03.txt").expect("Unable to read day 1 input"))
+    parse_map(&fs::read_to_string("inputs/day03.txt").expect("Unable to read day 3 input"))
 }
 
 fn parse_map(text: &str) -> Vec<Vec<CellState>> {

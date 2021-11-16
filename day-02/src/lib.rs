@@ -68,7 +68,7 @@ impl Password {
 
 pub fn read_input() -> Vec<Password> {
     fs::read_to_string("inputs/day02.txt")
-        .expect("Unable to read day 1 input")
+        .expect("Unable to read day 2 input")
         .lines()
         .map(|line| Password::new(line).expect(&*format!("Unable to parse password: {}", line)))
         .collect()

@@ -130,7 +130,7 @@ pub fn count_valid_passports(passports: &[Passport]) -> usize {
 
 pub fn read_input() -> Vec<Passport> {
     fs::read_to_string("inputs/day04.txt")
-        .expect("Unable to read day 3 input")
+        .expect("Unable to read day 4 input")
         .split("\n\n")
         .map(|value| Passport::from(&value.replace('\n', " ")))
         .collect()

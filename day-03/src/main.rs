@@ -1,4 +1,4 @@
-use day_02::{find_trees, read_input};
+use day_03::{find_trees, read_input};
 
 fn main() {
     let map = read_input();

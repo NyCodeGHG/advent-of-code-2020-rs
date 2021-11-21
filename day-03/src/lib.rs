@@ -8,6 +8,8 @@ pub enum CellState {
 }
 
 impl CellState {
+    /// # Panics
+    /// If the input is not a valid cell state
     pub fn from_char(char: &char) -> CellState {
         match char {
             '.' => CellState::EMPTY,

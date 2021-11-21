@@ -91,12 +91,12 @@ impl Passport {
         let issue_year: Option<String> = parse_value("iyr", &map);
         Passport {
             birth_year,
-            expiration_year,
-            eye_color,
-            hair_color,
-            height,
-            id,
             issue_year,
+            expiration_year,
+            height,
+            hair_color,
+            eye_color,
+            id,
         }
     }
 }
